@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AMIR CONTROL PANEL</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="admin-page">
+
+    <header class="admin-header">
+
+        <h1>AMIR CONTROL</h1>
+
+        <p>لوحة التحكم بالبث المباشر</p>
+
+    </header>
+
+    <section class="admin-panel" id="loginPanel">
+
+        <h3>تسجيل الدخول</h3>
+
+        <label>البريد الإلكتروني</label>
+
+        <input type="email" id="email" placeholder="Email">
+
+        <label>كلمة المرور</label>
+
+        <input type="password" id="password" placeholder="Password">
+
+        <button class="btn" id="loginBtn">تسجيل الدخول</button>
+
+        <div class="status" id="loginStatus"></div>
+
+    </section>
+
+    <section class="admin-panel hidden" id="controlPanel">
+
+        <h3>إدارة محتوى البث</h3>
+
+        <label>السؤال من:</label>
+
+        <input id="name" placeholder="اسم صاحب السؤال">
+
+        <label>السؤال:</label>
+
+        <textarea id="question" placeholder="اكتب السؤال هنا..."></textarea>
+
+        <label>الجواب:</label>
+
+        <textarea id="answer" placeholder="اكتب إجابتك هنا..."></textarea>
+
+        <button class="btn" id="publishBtn">
+            نشر التحديث
+        </button>
+
+        <button class="btn btn-secondary" id="clearBtn">
+            تصفير الحقول
+        </button>
+
+        <button class="btn btn-secondary" id="logoutBtn">
+            تسجيل الخروج
+        </button>
+
+        <div class="status" id="status"></div>
+
+    </section>
+
+</div>
+
+<script type="module">
+
+import { db, auth } from './firebase.js';
+
+import {
+    ref,
+    set,
+    onValue
+} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+
+import {
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+    signOut
+} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+const loginPanel = document.getElementById('loginPanel');
+const controlPanel = document.getElementById('controlPanel');
+
+const nameInput = document.getElementById('name');
+const questionInput = document.getElementById('question');
+const answerInput = document.getElementById('answer');
+
+const liveRef = ref(db, 'live');
+
+document.getElementById('loginBtn').onclick = async () => {
+
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+
+    try {
+
+        await signInWithEmailAndPassword(auth, email, password);
+
+        document.getElementById('loginStatus').textContent = '';
+
+    } catch (error) {
+
+        document.getElementById('loginStatus').textContent =
+            'تعذر تسجيل الدخول، تحقق من البيانات.';
+
+    }
+
+};
+
+onAuthStateChanged(auth, (user) => {
+
+    loginPanel.classList.toggle('hidden', !!user);
+    controlPanel.classList.toggle('hidden', !user);
+
+});
+
+document.getElementById('publishBtn').onclick = async () => {
+
+    try {
+
+        await set(liveRef, {
+
+            name: nameInput.value.trim(),
+            question: questionInput.value.trim(),
+            answer: answerInput.value.trim()
+
+        });
+
+        document.getElementById('status').textContent =
+            '✓ تم تحديث شاشة البث بنجاح';
+
+    } catch (error) {
+
+        document.getElementById('status').textContent =
+            'حدث خطأ أثناء النشر';
+
+    }
+
+};
+
+document.getElementById('clearBtn').onclick = async () => {
+
+    nameInput.value = '';
+    questionInput.value = '';
+    answerInput.value = '';
+
+    try {
+
+        await set(liveRef, {
+            name: '',
+            question: '',
+            answer: ''
+        });
+
+        document.getElementById('status').textContent =
+            'تم تصفير الحقول';
+
+    } catch (error) {
+
+        document.getElementById('status').textContent =
+            'تعذر تصفير الحقول';
+
+    }
+
+};
+
+document.getElementById('logoutBtn').onclick = async () => {
+
+    await signOut(auth);
+
+};
+
+onValue(liveRef, (snapshot) => {
+
+    const data = snapshot.val() || {};
+
+    nameInput.value = data.name || '';
+    questionInput.value = data.question || '';
+    answerInput.value = data.answer || '';
+
+});
+
+</script>
+
+</body>
+</html>

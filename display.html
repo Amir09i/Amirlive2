@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AMIR LIVE Q&A</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="display-page">
+
+    <main class="live-card">
+
+        <header class="header">
+
+            <div class="live-badge">
+                <span class="live-dot"></span>
+                بث مباشر
+            </div>
+
+            <h1>اسأل وأنا أجيبك</h1>
+
+            <p>مساحة للحوار والإجابة عن أسئلتكم</p>
+
+        </header>
+
+        <section class="field">
+
+            <div class="field-label">السؤال من</div>
+
+            <div class="field-content placeholder" id="name">
+                بانتظار السؤال...
+            </div>
+
+        </section>
+
+        <section class="field">
+
+            <div class="field-label">السؤال</div>
+
+            <div class="field-content placeholder" id="question">
+                سيتم عرض السؤال هنا
+            </div>
+
+        </section>
+
+        <section class="field answer">
+
+            <div class="field-label">الجواب</div>
+
+            <div class="field-content placeholder" id="answer">
+                بانتظار الإجابة...
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script type="module">
+
+import { db } from './firebase.js';
+
+import {
+    ref,
+    onValue
+} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+
+const liveRef = ref(db, 'live');
+
+onValue(liveRef, (snapshot) => {
+
+    const data = snapshot.val() || {};
+
+    update('name', data.name, 'بانتظار السؤال...');
+    update('question', data.question, 'سيتم عرض السؤال هنا');
+    update('answer', data.answer, 'بانتظار الإجابة...');
+
+});
+
+function update(id, value, fallback) {
+
+    const element = document.getElementById(id);
+
+    const content = value || fallback;
+
+    element.textContent = content;
+
+    element.classList.toggle('placeholder', !value);
+
+}
+
+</script>
+
+</body>
+</html>
