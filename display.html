@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,56 +8,109 @@
 <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body class="broadcast">
 
-<div class="display-page">
+<div class="broadcast-screen">
 
-    <main class="live-card">
+    <header class="topbar">
 
-        <header class="header">
+        <div class="brand">
+            <span class="brand-mark">A</span>
+            <span>AMIR <b>LIVE</b></span>
+        </div>
 
-            <div class="live-badge">
-                <span class="live-dot"></span>
-                بث مباشر
+        <div class="live-indicator">
+            <span class="live-dot"></span>
+            LIVE
+        </div>
+
+    </header>
+
+    <main class="content-layout">
+
+        <!-- منطقة السؤال والجواب -->
+
+        <section class="main-content">
+
+            <div class="section-heading">
+                <span class="heading-line"></span>
+                <span>اسأل وأنا أجيبك</span>
             </div>
 
-            <h1>اسأل وأنا أجيبك</h1>
+            <div class="question-card">
 
-            <p>مساحة للحوار والإجابة عن أسئلتكم</p>
+                <div class="card-top">
 
-        </header>
+                    <span class="small-label">السؤال من</span>
 
-        <section class="field">
+                    <span class="person-name placeholder"
+                          id="name">
+                        بانتظار السؤال
+                    </span>
 
-            <div class="field-label">السؤال من</div>
+                </div>
 
-            <div class="field-content placeholder" id="name">
-                بانتظار السؤال...
+                <div class="question-area">
+
+                    <div class="field-title">
+                        السؤال
+                    </div>
+
+                    <div class="question-text placeholder"
+                         id="question">
+                        سيتم عرض السؤال هنا
+                    </div>
+
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="answer-area">
+
+                    <div class="field-title answer-title">
+                        الإجابة
+                    </div>
+
+                    <div class="answer-text placeholder"
+                         id="answer">
+                        بانتظار الإجابة...
+                    </div>
+
+                </div>
+
             </div>
 
         </section>
 
-        <section class="field">
+        <!-- المساحة الجانبية -->
 
-            <div class="field-label">السؤال</div>
+        <aside class="side-panel">
 
-            <div class="field-content placeholder" id="question">
-                سيتم عرض السؤال هنا
+            <div class="side-heading">
+
+                <span class="side-icon">✦</span>
+
+                <h2>مساحة جانبية</h2>
+
             </div>
 
-        </section>
-
-        <section class="field answer">
-
-            <div class="field-label">الجواب</div>
-
-            <div class="field-content placeholder" id="answer">
-                بانتظار الإجابة...
+            <div class="side-content placeholder"
+                 id="sideNote">
+                مساحة للملاحظات والكلام الإضافي
             </div>
 
-        </section>
+            <div class="side-footer">
+                AMIR LIVE Q&A
+            </div>
+
+        </aside>
 
     </main>
+
+    <footer class="bottom-bar">
+        <span>حياكم الله جميعاً</span>
+        <span class="footer-brand">AMIR</span>
+    </footer>
 
 </div>
 
@@ -71,27 +125,55 @@ import {
 
 const liveRef = ref(db, 'live');
 
+function updateField(id, value, fallback) {
+
+    const element = document.getElementById(id);
+
+    const content = value || '';
+
+    if (element.textContent === (content || fallback)) return;
+
+    element.classList.remove('animate-in');
+
+    void element.offsetWidth;
+
+    element.textContent = content || fallback;
+
+    element.classList.toggle('placeholder', !content);
+
+    element.classList.add('animate-in');
+
+}
+
 onValue(liveRef, (snapshot) => {
 
     const data = snapshot.val() || {};
 
-    update('name', data.name, 'بانتظار السؤال...');
-    update('question', data.question, 'سيتم عرض السؤال هنا');
-    update('answer', data.answer, 'بانتظار الإجابة...');
+    updateField(
+        'name',
+        data.name,
+        'بانتظار السؤال'
+    );
+
+    updateField(
+        'question',
+        data.question,
+        'سيتم عرض السؤال هنا'
+    );
+
+    updateField(
+        'answer',
+        data.answer,
+        'بانتظار الإجابة...'
+    );
+
+    updateField(
+        'sideNote',
+        data.sideNote,
+        'مساحة للملاحظات والكلام الإضافي'
+    );
 
 });
-
-function update(id, value, fallback) {
-
-    const element = document.getElementById(id);
-
-    const content = value || fallback;
-
-    element.textContent = content;
-
-    element.classList.toggle('placeholder', !value);
-
-}
 
 </script>
 
