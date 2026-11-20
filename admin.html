@@ -1,78 +1,474 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<!DOCTYPE html><html lang="ar" dir="rtl"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#080b10"><title>AMIR LIVE | لوحة التحكم</title>
 
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AMIR CONTROL PANEL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
 <link rel="stylesheet" href="style.css">
-</head>
 
-<body>
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
 
-<div class="admin-page">
+    body {
+        font-family: 'Cairo', sans-serif;
+        background: #080b10;
+        color: #f2f4f7;
+        min-height: 100vh;
+        padding: 25px 15px;
+    }
 
-    <header class="admin-header">
+    .container {
+        width: 100%;
+        max-width: 650px;
+        margin: auto;
+    }
 
-        <h1>AMIR CONTROL</h1>
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 0 25px;
+        border-bottom: 1px solid #202630;
+        margin-bottom: 25px;
+    }
 
-        <p>لوحة التحكم بالبث المباشر</p>
+    .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
 
-    </header>
+    .logo {
+        width: 45px;
+        height: 45px;
+        background: #152333;
+        border: 1px solid #25415b;
+        border-radius: 13px;
+        display: grid;
+        place-items: center;
+        font-size: 19px;
+        font-weight: 800;
+        color: #55baff;
+    }
 
-    <section class="admin-panel" id="loginPanel">
+    .brand h1 {
+        font-size: 19px;
+        font-weight: 800;
+        letter-spacing: 1px;
+    }
 
-        <h3>تسجيل الدخول</h3>
+    .brand p {
+        font-size: 11px;
+        color: #84909e;
+    }
 
-        <label>البريد الإلكتروني</label>
+    .connection {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 12px;
+        color: #aeb8c5;
+    }
 
-        <input type="email" id="email" placeholder="Email">
+    .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #e57373;
+    }
 
-        <label>كلمة المرور</label>
+    .panel {
+        background: #10151d;
+        border: 1px solid #202a36;
+        border-radius: 18px;
+        padding: 23px;
+        margin-bottom: 18px;
+    }
 
-        <input type="password" id="password" placeholder="Password">
+    .panel h2 {
+        font-size: 17px;
+        margin-bottom: 5px;
+    }
 
-        <button class="btn" id="loginBtn">تسجيل الدخول</button>
+    .subtitle {
+        font-size: 12px;
+        color: #8793a2;
+        margin-bottom: 22px;
+    }
 
-        <div class="status" id="loginStatus"></div>
+    .field {
+        margin-bottom: 17px;
+    }
 
-    </section>
+    label {
+        display: block;
+        font-size: 13px;
+        color: #b9c4d1;
+        margin-bottom: 8px;
+    }
 
-    <section class="admin-panel hidden" id="controlPanel">
+    input,
+    textarea {
+        width: 100%;
+        background: #090e15;
+        border: 1px solid #273342;
+        border-radius: 11px;
+        padding: 13px 14px;
+        color: #fff;
+        font-family: inherit;
+        font-size: 14px;
+        outline: none;
+        transition: .2s;
+    }
 
-        <h3>إدارة محتوى البث</h3>
+    input:focus,
+    textarea:focus {
+        border-color: #2698dc;
+        box-shadow: 0 0 0 3px #2698dc18;
+    }
 
-        <label>السؤال من:</label>
+    textarea {
+        min-height: 105px;
+        resize: vertical;
+    }
 
-        <input id="name" placeholder="اسم صاحب السؤال">
+    input::placeholder,
+    textarea::placeholder {
+        color: #596574;
+    }
 
-        <label>السؤال:</label>
+    button {
+        font-family: inherit;
+        cursor: pointer;
+        border: none;
+        transition: .2s;
+    }
 
-        <textarea id="question" placeholder="اكتب السؤال هنا..."></textarea>
+    button:disabled {
+        opacity: .5;
+        cursor: not-allowed;
+    }
 
-        <label>الجواب:</label>
+    .primary-btn {
+        width: 100%;
+        padding: 14px;
+        background: #168bd0;
+        color: white;
+        border-radius: 11px;
+        font-size: 14px;
+        font-weight: 700;
+    }
 
-        <textarea id="answer" placeholder="اكتب إجابتك هنا..."></textarea>
+    .primary-btn:hover {
+        background: #0879bd;
+    }
 
-        <button class="btn" id="publishBtn">
-            نشر التحديث
+    .secondary-btn {
+        flex: 1;
+        padding: 12px;
+        background: #1b2633;
+        border: 1px solid #2a394a;
+        color: #dce5ef;
+        border-radius: 10px;
+        font-size: 13px;
+    }
+
+    .danger-btn {
+        flex: 1;
+        padding: 12px;
+        background: #351b20;
+        border: 1px solid #633039;
+        color: #ff9ca6;
+        border-radius: 10px;
+        font-size: 13px;
+    }
+
+    .actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 13px;
+    }
+
+    .status {
+        min-height: 24px;
+        margin-top: 14px;
+        font-size: 12px;
+        color: #67c9a6;
+        text-align: center;
+    }
+
+    .hidden {
+        display: none !important;
+    }
+
+    .login-panel {
+        max-width: 430px;
+        margin: 60px auto;
+    }
+
+    .login-icon {
+        width: 55px;
+        height: 55px;
+        border-radius: 16px;
+        background: #14283a;
+        color: #55baff;
+        display: grid;
+        place-items: center;
+        font-size: 24px;
+        margin-bottom: 18px;
+    }
+
+    .answer-control {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        background: #0b1119;
+        border: 1px solid #273342;
+        padding: 13px;
+        border-radius: 11px;
+        margin-top: 15px;
+    }
+
+    .answer-control span {
+        font-size: 12px;
+        color: #b9c4d1;
+    }
+
+    .answer-control button {
+        background: #18354b;
+        color: #69c5ff;
+        padding: 8px 13px;
+        border-radius: 8px;
+        font-size: 12px;
+    }
+
+    .logout {
+        width: 100%;
+        padding: 12px;
+        background: transparent;
+        color: #e58c96;
+        border: 1px solid #49272d;
+        border-radius: 10px;
+        margin-top: 5px;
+        font-size: 13px;
+    }
+
+    footer {
+        text-align: center;
+        color: #596574;
+        font-size: 11px;
+        padding: 20px 0;
+    }
+
+    @media (max-width: 480px) {
+        body {
+            padding: 15px 12px;
+        }
+
+        .panel {
+            padding: 18px;
+        }
+
+        .brand h1 {
+            font-size: 16px;
+        }
+    }
+</style>
+
+</head><body><div class="container"><!-- HEADER -->
+
+<header class="header">
+
+    <div class="brand">
+
+        <div class="logo">A</div>
+
+        <div>
+            <h1>AMIR LIVE</h1>
+            <p>CONTROL PANEL</p>
+        </div>
+
+    </div>
+
+    <div class="connection">
+
+        <span class="dot" id="connectionDot"></span>
+        <span id="connectionText">جاري الاتصال...</span>
+
+    </div>
+
+</header>
+
+
+<!-- LOGIN -->
+
+<section class="panel login-panel" id="loginPanel">
+
+    <div class="login-icon">⌑</div>
+
+    <h2>تسجيل الدخول</h2>
+
+    <p class="subtitle">
+        سجّل الدخول للوصول إلى لوحة التحكم
+    </p>
+
+    <div class="field">
+
+        <label for="email">البريد الإلكتروني</label>
+
+        <input
+            type="email"
+            id="email"
+            placeholder="example@email.com"
+            autocomplete="username"
+        >
+
+    </div>
+
+    <div class="field">
+
+        <label for="password">كلمة المرور</label>
+
+        <input
+            type="password"
+            id="password"
+            placeholder="••••••••"
+            autocomplete="current-password"
+        >
+
+    </div>
+
+    <button class="primary-btn" id="loginBtn">
+        تسجيل الدخول
+    </button>
+
+    <div class="status" id="loginStatus"></div>
+
+</section>
+
+
+<!-- CONTROL PANEL -->
+
+<main id="controlPanel" class="hidden">
+
+    <section class="panel">
+
+        <h2>إدارة البث المباشر</h2>
+
+        <p class="subtitle">
+            تحكّم بالمحتوى الظاهر على شاشة البث
+        </p>
+
+
+        <div class="field">
+
+            <label for="name">اسم صاحب السؤال</label>
+
+            <input
+                type="text"
+                id="name"
+                placeholder="مثلاً: أحمد"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label for="question">السؤال</label>
+
+            <textarea
+                id="question"
+                placeholder="اكتب السؤال هنا..."
+            ></textarea>
+
+        </div>
+
+
+        <div class="field">
+
+            <label for="answer">الإجابة</label>
+
+            <textarea
+                id="answer"
+                placeholder="اكتب الإجابة هنا..."
+            ></textarea>
+
+        </div>
+
+
+        <div class="field">
+
+            <label for="sideNote">ملاحظة جانبية</label>
+
+            <textarea
+                id="sideNote"
+                placeholder="نص إضافي يظهر بجانب السؤال..."
+            ></textarea>
+
+        </div>
+
+
+        <button class="primary-btn" id="publishBtn">
+            نشر التحديث على البث
         </button>
 
-        <button class="btn btn-secondary" id="clearBtn">
-            تصفير الحقول
-        </button>
 
-        <button class="btn btn-secondary" id="logoutBtn">
-            تسجيل الخروج
-        </button>
+        <div class="answer-control">
+
+            <span>التحكم بظهور الإجابة</span>
+
+            <button id="answerToggle">
+                إخفاء الإجابة
+            </button>
+
+        </div>
+
+
+        <div class="actions">
+
+            <button class="danger-btn" id="clearBtn">
+                تصفير الشاشة
+            </button>
+
+        </div>
+
 
         <div class="status" id="status"></div>
 
     </section>
 
-</div>
 
-<script type="module">
+    <section class="panel">
+
+        <h2>إدارة الجلسة</h2>
+
+        <p class="subtitle">
+            إنهاء جلسة التحكم الحالية
+        </p>
+
+        <button class="logout" id="logoutBtn">
+            تسجيل الخروج
+        </button>
+
+    </section>
+
+</main>
+
+
+<footer>
+    AMIR LIVE Q&A · CONTROL SYSTEM
+</footer>
+
+</div><!-- FIREBASE + JAVASCRIPT --><script type="module">
 
 import { db, auth } from './firebase.js';
 
@@ -88,34 +484,71 @@ import {
     signOut
 } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
 
+
+const liveRef = ref(db, 'live');
+const connectedRef = ref(db, '.info/connected');
+
 const loginPanel = document.getElementById('loginPanel');
 const controlPanel = document.getElementById('controlPanel');
 
 const nameInput = document.getElementById('name');
 const questionInput = document.getElementById('question');
 const answerInput = document.getElementById('answer');
+const sideNoteInput = document.getElementById('sideNote');
 
-const liveRef = ref(db, 'live');
+const statusBox = document.getElementById('status');
+
+let currentData = {};
+let isPublishing = false;
+
+
+// CONNECTION STATUS
+
+onValue(connectedRef, (snapshot) => {
+
+    const connected = snapshot.val() === true;
+
+    document.getElementById('connectionText').textContent =
+        connected ? 'متصل' : 'غير متصل';
+
+    document.getElementById('connectionDot').style.background =
+        connected ? '#50c9a3' : '#e57373';
+
+});
+
+
+// LOGIN
 
 document.getElementById('loginBtn').onclick = async () => {
 
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
 
+    const loginStatus = document.getElementById('loginStatus');
+
+    if (!email || !password) {
+        loginStatus.textContent = 'يرجى إدخال بيانات الدخول';
+        return;
+    }
+
     try {
+
+        loginStatus.textContent = 'جاري تسجيل الدخول...';
 
         await signInWithEmailAndPassword(auth, email, password);
 
-        document.getElementById('loginStatus').textContent = '';
+        loginStatus.textContent = 'تم تسجيل الدخول بنجاح';
 
     } catch (error) {
 
-        document.getElementById('loginStatus').textContent =
-            'تعذر تسجيل الدخول، تحقق من البيانات.';
+        loginStatus.textContent = 'فشل تسجيل الدخول. تحقق من البيانات.';
 
     }
 
 };
+
+
+// AUTH STATE
 
 onAuthStateChanged(auth, (user) => {
 
@@ -124,73 +557,154 @@ onAuthStateChanged(auth, (user) => {
 
 });
 
+
+// READ DATA
+
+onValue(liveRef, (snapshot) => {
+
+    currentData = snapshot.val() || {};
+
+    nameInput.value = currentData.name || '';
+    questionInput.value = currentData.question || '';
+    answerInput.value = currentData.answer || '';
+    sideNoteInput.value = currentData.sideNote || '';
+
+    updateAnswerButton();
+
+});
+
+
+// PUBLISH
+
 document.getElementById('publishBtn').onclick = async () => {
+
+    if (isPublishing) return;
+
+    const name = nameInput.value.trim();
+    const question = questionInput.value.trim();
+
+    if (!name || !question) {
+
+        statusBox.textContent =
+            'يرجى كتابة اسم صاحب السؤال والسؤال أولاً';
+
+        return;
+
+    }
+
+    isPublishing = true;
+
+    const button = document.getElementById('publishBtn');
+    button.disabled = true;
+
+    statusBox.textContent = 'جاري النشر...';
 
     try {
 
         await set(liveRef, {
 
-            name: nameInput.value.trim(),
-            question: questionInput.value.trim(),
-            answer: answerInput.value.trim()
+            name,
+            question,
+            answer: answerInput.value.trim(),
+            sideNote: sideNoteInput.value.trim(),
+            showAnswer: currentData.showAnswer !== false
 
         });
 
-        document.getElementById('status').textContent =
-            '✓ تم تحديث شاشة البث بنجاح';
+        statusBox.textContent = '✓ تم نشر التحديث بنجاح';
 
     } catch (error) {
 
-        document.getElementById('status').textContent =
-            'حدث خطأ أثناء النشر';
+        statusBox.textContent =
+            'تعذر النشر. تحقق من الاتصال والصلاحيات.';
+
+    } finally {
+
+        isPublishing = false;
+        button.disabled = false;
 
     }
 
 };
+
+
+// CLEAR
 
 document.getElementById('clearBtn').onclick = async () => {
 
-    nameInput.value = '';
-    questionInput.value = '';
-    answerInput.value = '';
+    if (!confirm('هل تريد تصفير جميع الحقول على شاشة البث؟')) return;
 
     try {
 
         await set(liveRef, {
+
             name: '',
             question: '',
-            answer: ''
+            answer: '',
+            sideNote: '',
+            showAnswer: true
+
         });
 
-        document.getElementById('status').textContent =
-            'تم تصفير الحقول';
+        statusBox.textContent = 'تم تصفير الشاشة بنجاح';
 
     } catch (error) {
 
-        document.getElementById('status').textContent =
-            'تعذر تصفير الحقول';
+        statusBox.textContent = 'تعذر تصفير الشاشة';
 
     }
 
 };
 
+
+// ANSWER VISIBILITY
+
+function updateAnswerButton() {
+
+    const button = document.getElementById('answerToggle');
+
+    button.textContent =
+        currentData.showAnswer === false
+        ? 'إظهار الإجابة'
+        : 'إخفاء الإجابة';
+
+}
+
+
+document.getElementById('answerToggle').onclick = async () => {
+
+    try {
+
+        const nextState = currentData.showAnswer === false;
+
+        await set(liveRef, {
+
+            ...currentData,
+            showAnswer: nextState
+
+        });
+
+        statusBox.textContent =
+            nextState ? 'تم إظهار الإجابة' : 'تم إخفاء الإجابة';
+
+    } catch (error) {
+
+        statusBox.textContent = 'تعذر تغيير حالة الإجابة';
+
+    }
+
+};
+
+
+// LOGOUT
+
 document.getElementById('logoutBtn').onclick = async () => {
+
+    if (!confirm('هل تريد تسجيل الخروج؟')) return;
 
     await signOut(auth);
 
 };
 
-onValue(liveRef, (snapshot) => {
-
-    const data = snapshot.val() || {};
-
-    nameInput.value = data.name || '';
-    questionInput.value = data.question || '';
-    answerInput.value = data.answer || '';
-
-});
-
-</script>
-
-</body>
+</script></body>
 </html>
